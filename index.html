@@ -69,6 +69,10 @@ footer{font-size:14px;color:var(--muted)}
 </head>
 <body>
 <main>
+  <div class="card" id="gobanner" hidden style="border-color:var(--accent)">
+    <strong>Opening your email app&hellip;</strong>
+    <p class="hint">If nothing opens, use the buttons below. You can also copy and paste the message.</p>
+  </div>
   <div class="kicker">Kingsbury Pond · Norfolk &amp; Franklin, MA</div>
   <h1>Help save Kingsbury Pond. Send one short email.</h1>
   <p class="lede">Heavy pumping from Franklin's town wells, mostly Well 4, can pull down the groundwater that feeds our pond. MassDEP is about to publish a draft permit on how Franklin manages its wells. The more residents who ask for it, the more MassDEP sees that people are watching.</p>
@@ -209,6 +213,13 @@ $("copylink").addEventListener("click", function(){
   copyText(pageUrl).then(function(){ say("Page link copied. Paste it into a message or post."); })
                    .catch(function(){ say("Copy did not work. Copy the address from your browser bar."); });
 });
+
+// Auto-open mode: a link ending in ?go=1 tries to open the email app right away.
+// The page stays visible with the fallback buttons in case the phone or app blocks it.
+if (/[?&]go=1(&|$)/.test(location.search)) {
+  $("gobanner").hidden = false;
+  setTimeout(function(){ window.location.href = $("mailto").href; }, 400);
+}
 
 // Optional real photo: if pond.jpg sits beside this file, show it in place of the drawing.
 var img = new Image();
